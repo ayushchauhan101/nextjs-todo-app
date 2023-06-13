@@ -1,7 +1,16 @@
+import Head from "next/head"
+import Navbar from "@/components/Navbar"
+
 const index = () => {
   return (
     <div>
-      <h1>This is the homepage</h1>
+      <Head>
+        <title>Todos App</title>
+      </Head>
+      <Navbar />
+      <main>
+        <h1>Todos App</h1>
+      </main>
     </div>
   )
 }
