@@ -13,6 +13,6 @@ export default async (req, res) => {
     } catch (err) {
         console.log(err)
         res.statusCode = 418
-        res.json({ errorMessage: 'something went wrong' })
+        res.json({ errorMessage: err.message })
     }
 }
