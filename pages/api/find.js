@@ -4,12 +4,12 @@ export default async (req, res) => {
     const { id } = req.body
 
     try {
-        const deletedRecords = await table.destroy([id])
+        const foundRecord = await table.find(id)
         res.statusCode = 200
-        res.json(getMinifiedRecord(deletedRecords[0]))
+        res.json(getMinifiedRecord(foundRecord))
     } catch (err) {
         console.log(err)
         res.statusCode = 418
-        res.json({ error: err.message })
+        res.json({ errorMessage: err.message })
     }
 }
