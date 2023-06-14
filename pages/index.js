@@ -1,7 +1,10 @@
 import Head from "next/head"
 import Navbar from "@/components/Navbar"
 
-const index = () => {
+import { table, minifyRecords } from "./api/utils/airtable"
+
+export default function index({ initialTodos }) {
+  // console.log(initialTodos)
   return (
     <div>
       <Head>
@@ -14,4 +17,22 @@ const index = () => {
     </div>
   )
 }
-export default index
+
+// fetch Airtable data on this component render or build
+export async function getServerSideProps(context) {
+  try {
+    const todos = await table.select({}).firstPage()
+    return {
+      props: {
+        initialTodos: minifyRecords(todos)
+      }
+    }
+  } catch (err) {
+    console.log(err)
+    return {
+      props: {
+        err: 'Something went wrong'
+      }
+    }
+  }
+}
