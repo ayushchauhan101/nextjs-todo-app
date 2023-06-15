@@ -1,11 +1,21 @@
+import { useEffect, useContext } from "react"
+
 import Head from "next/head"
 import Navbar from "@/components/Navbar"
 
 import { table, minifyRecords } from "./api/utils/airtable"
 import Todo from "@/components/Todo"
 
+import { TodosContext } from '@/contexts/TodosContext'
+
 export default function index ({ initialTodos }) {
-  // console.log(initialTodos)
+
+  const { todos, setTodos } = useContext(TodosContext)
+
+  useEffect(() => {
+    setTodos(initialTodos)
+  }, [])
+
   return (
     <div>
       <Head>
@@ -15,7 +25,8 @@ export default function index ({ initialTodos }) {
       <main>
         <h1>Todos App</h1>
         <ul>
-          { initialTodos.map(todo => <Todo key={ todo.id } todo={ todo } />) }
+          { todos &&
+            todos.map((todo) => <Todo key={ todo.id } todo={ todo } />) }
         </ul>
       </main>
     </div>
@@ -24,16 +35,14 @@ export default function index ({ initialTodos }) {
 
 // fetch Airtable data on this component render or build
 export async function getServerSideProps (context) {
-  try
-  {
+  try {
     const todos = await table.select({}).firstPage()
     return {
       props: {
         initialTodos: minifyRecords(todos)
       }
     }
-  } catch (err)
-  {
+  } catch (err) {
     console.log(err)
     return {
       props: {
