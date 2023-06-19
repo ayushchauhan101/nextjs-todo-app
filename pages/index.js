@@ -1,17 +1,16 @@
 import { useEffect, useContext } from "react"
-
-import Head from "next/head"
-import Navbar from "@/components/Navbar"
-
 import { table, minifyRecords } from "./api/utils/airtable"
-import Todo from "@/components/Todo"
+import { useUser } from "@auth0/nextjs-auth0/client"
+import Head from "next/head"
 
+import Navbar from "@/components/Navbar"
+import Todo from "@/components/Todo"
 import { TodosContext } from '@/contexts/TodosContext'
 
 export default function index ({ initialTodos }) {
-
   const { todos, setTodos } = useContext(TodosContext)
-
+  const {user} = useUser()
+  console.log(user)
   useEffect(() => {
     setTodos(initialTodos)
   }, [])
@@ -21,7 +20,7 @@ export default function index ({ initialTodos }) {
       <Head>
         <title>Todos App</title>
       </Head>
-      <Navbar />
+      <Navbar user={user} />
       <main>
         <h1>Todos App</h1>
         <ul>
